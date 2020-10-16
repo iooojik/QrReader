@@ -1,0 +1,17 @@
+<resources>
+
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorSecondary</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorSecondary">@color/colorDarkGreen</item>
+        <item name="android:textColor">@color/colorText</item>
+        <item name="colorControlNormal">@color/colorText</item>
+        <item name="android:listDivider">@color/colorAccent</item>
+        <item name="colorOnSurface">@color/colorText</item>
+        <item name="colorSurface">@color/colorPrimaryDark</item>
+        <item name="android:textColorPrimary">@color/colorText</item>
+        <item name="backgroundColor">@color/colorSecondary</item>
+    </style>
+
+</resources>
