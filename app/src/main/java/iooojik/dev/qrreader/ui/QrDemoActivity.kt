@@ -1,6 +1,5 @@
 package iooojik.dev.qrreader.ui
 
-import android.R.attr.button
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -23,7 +22,6 @@ import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
 import com.google.zxing.common.BitMatrix
 import iooojik.dev.qrreader.R
-import iooojik.dev.qrreader.qr.BarcodeCaptureActivity
 import java.util.*
 
 
@@ -68,6 +66,7 @@ class QrDemoActivity : AppCompatActivity(), View.OnClickListener {
         img_width: Int,
         img_height: Int
     ): Bitmap? {
+        //создание qr-кода
         val contentsToEncode = contents ?: return null
         var hints: Map<EncodeHintType?, Any?>? = null
         val encoding: String = "UTF-8"
