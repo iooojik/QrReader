@@ -5,5 +5,7 @@
     <string name="title_activity_menu">MenuActivity</string>
     <string name="hello_world">Hello Square World!</string>
     <string name="title_activity_create_q_r">CreateQRActivity</string>
+    <string name="addFileURL">Добавить ссылку на файл</string>
+    <string name="openFileButton">Открыть файл</string>
 
 </resources>

@@ -53,6 +53,16 @@
                 android:text="@string/createButton"
                 app:icon="@drawable/round_edit_24_2" />
 
+            <Button
+                android:id="@+id/addURLtoQR"
+                style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/fab_margin"
+                android:text="@string/addFileURL"
+                app:icon="@drawable/baseline_folder_24" />
+
             <ImageView
                 android:id="@+id/imageViewQR"
                 android:layout_width="200dp"

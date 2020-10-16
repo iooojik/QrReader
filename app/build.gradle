@@ -47,7 +47,6 @@ dependencies {
     }
     implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.wear:wear:1.0.0'
-    compileOnly 'com.google.android.wearable:wearable:2.5.0'
+    implementation 'com.github.abbasalim:FilePickerDialog-master:1.6.0'
 
 }

@@ -9,7 +9,11 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
+import android.webkit.MimeTypeMap
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -21,7 +25,10 @@ import com.google.zxing.EncodeHintType
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
 import com.google.zxing.common.BitMatrix
+import iooojik.dev.qrreader.AppСonstants
+import iooojik.dev.qrreader.AppСonstants.regex
 import iooojik.dev.qrreader.R
+import ir.esfandune.filepickerDialog.ui.PickerDialog
 import java.util.*
 
 
@@ -38,6 +45,8 @@ class CreateQRActivity : AppCompatActivity(), View.OnClickListener {
         buttonCreateQR.setOnClickListener(this)
         val fab = findViewById<FloatingActionButton>(R.id.fab)
         fab.setOnClickListener(this)
+        val addURLtoQR = findViewById<Button>(R.id.addURLtoQR)
+        addURLtoQR.setOnClickListener(this)
     }
 
     @Throws(WriterException::class)
@@ -57,7 +66,6 @@ class CreateQRActivity : AppCompatActivity(), View.OnClickListener {
         result = try {
             writer.encode(contentsToEncode, format, img_width, img_height, hints)
         } catch (iae: IllegalArgumentException) {
-            // Unsupported format
             return null
         }
         val width = result.width
@@ -79,34 +87,66 @@ class CreateQRActivity : AppCompatActivity(), View.OnClickListener {
         when(p0!!.id){
             R.id.buttonCreateQR -> {
                 val textField = findViewById<EditText>(R.id.textField)
-                if (!textField.text.isNullOrEmpty()) {
-                    val imgQR = findViewById<ImageView>(R.id.imageViewQR)
-                    imgQR.visibility = View.VISIBLE
-                    val bitmap = encodeAsBitmap(textField.text.toString(), BarcodeFormat.QR_CODE, 200, 200)
-                    imgQR.setImageBitmap(bitmap)
-                    val buttonShare = findViewById<Button>(R.id.buttonShare)
-                    buttonShare.setOnClickListener {
-                        if (isExternalStorageWritable()) {
-                            if (bitmap != null) {
-                                val imgSaved = MediaStore.Images.Media.insertImage(
-                                    contentResolver, bitmap,
-                                    UUID.randomUUID().toString() + ".png", "drawing note"
-                                )
-                                shareImageUri(Uri.parse(imgSaved))
-                            }
-                        }
-                    }
-                    buttonShare.visibility = View.VISIBLE
-                } else Snackbar.make(p0, "Вы не ввели текст", Snackbar.LENGTH_SHORT)
-                    .setBackgroundTint(Color.parseColor("#24242b"))
-                    .setTextColor(Color.parseColor("#ffffff")).show()
+                createQR(p0, textField.text.toString())
+                textField.clearFocus()
+                window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+                hideKeyboard()
             }
 
             R.id.fab -> {
                 finish()
+                hideKeyboard()
+            }
+
+            R.id.addURLtoQR -> {
+                PickerDialog.FilePicker(this).onFileSelect { clickedFile ->
+                    createQR(p0, clickedFile.toURI().toString()+ regex +
+                            MimeTypeMap.getSingleton().
+                            getMimeTypeFromExtension(MimeTypeMap.
+                            getFileExtensionFromUrl(clickedFile.toURI().toString()).toString()))
+                }
             }
         }
     }
+    private fun hideKeyboard() {
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(window.decorView.windowToken, 0)
+    }
+
+
+    private fun createQR(p0: View?, text: String){
+
+        if (!text.isNullOrEmpty()) {
+            val imgQR = findViewById<ImageView>(R.id.imageViewQR)
+            imgQR.visibility = View.VISIBLE
+            val bitmap = encodeAsBitmap(
+                text,
+                BarcodeFormat.QR_CODE,
+                200,
+                200
+            )
+            imgQR.setImageBitmap(bitmap)
+            val buttonShare = findViewById<Button>(R.id.buttonShare)
+            buttonShare.setOnClickListener {
+                if (isExternalStorageWritable()) {
+                    if (bitmap != null) {
+                        val imgSaved = MediaStore.Images.Media.insertImage(
+                            contentResolver, bitmap,
+                            UUID.randomUUID().toString() + ".png", "saved qr"
+                        )
+                        shareImageUri(Uri.parse(imgSaved))
+                    }
+                }
+            }
+            buttonShare.visibility = View.VISIBLE
+
+        } else p0?.let {
+            Snackbar.make(it, "Вы не ввели текст", Snackbar.LENGTH_SHORT)
+                .setBackgroundTint(Color.parseColor("#24242b"))
+                .setTextColor(Color.parseColor("#ffffff")).show()
+        }
+    }
+
 
     private fun isExternalStorageWritable(): Boolean {
         val state = Environment.getExternalStorageState()

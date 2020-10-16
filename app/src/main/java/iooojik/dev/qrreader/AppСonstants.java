@@ -19,5 +19,5 @@ public class AppСonstants {
     public static final String TAG = "OpenCameraSource";
     public static final int DUMMY_TEXTURE_NAME = 100;
     public static final float ASPECT_RATIO_TOLERANCE = 0.01f;
-
+    public static final String regex = "@@@@@iooojik@@@@";
 }

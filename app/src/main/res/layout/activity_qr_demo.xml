@@ -37,7 +37,8 @@
             android:id="@+id/decodedQR"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:textAlignment="center" />
 
         <Button
             android:id="@+id/buttonCopyText"
@@ -47,6 +48,15 @@
             android:layout_gravity="center"
             android:layout_margin="@dimen/fab_margin"
             android:text="@string/copyTextButton" />
+
+        <Button
+            android:id="@+id/openFile"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/fab_margin"
+            android:text="@string/openFileButton" />
 
         <Button
             android:id="@+id/openInBrowser"

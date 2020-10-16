@@ -9,6 +9,7 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -21,6 +22,7 @@ import com.google.zxing.EncodeHintType
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
 import com.google.zxing.common.BitMatrix
+import iooojik.dev.qrreader.AppСonstants.regex
 import iooojik.dev.qrreader.R
 import java.util.*
 
@@ -57,6 +59,27 @@ class QrDemoActivity : AppCompatActivity(), View.OnClickListener {
         buttonCopyText.setOnClickListener(this)
         val fab = findViewById<FloatingActionButton>(R.id.fab)
         fab.setOnClickListener(this)
+        if (text.startsWith("file:/")){
+            val openFile = findViewById<Button>(R.id.openFile)
+            openFile.visibility = View.VISIBLE
+            openFile.setOnClickListener {
+                openFileDir()
+            }
+        }
+    }
+
+    private fun openFileDir(){
+        try {
+            var mType = ""
+            var fileURI = ""
+            fileURI = text.split(regex)[0]
+            mType = text.split(regex)[1]
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(fileURI))
+            intent.type = mType
+            startActivity(intent)
+        } catch (e: Exception){
+            Log.e("opening file error", e.toString())
+        }
     }
 
     @Throws(WriterException::class)
@@ -109,11 +132,13 @@ class QrDemoActivity : AppCompatActivity(), View.OnClickListener {
                 )
             }
             R.id.buttonCopyText -> {
-                val clipboard: ClipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clipboard: ClipboardManager =
+                    getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 val clip = ClipData.newPlainText("", text)
                 clipboard.setPrimaryClip(clip)
-                Snackbar.make(p0, "Скопировано", Snackbar.LENGTH_SHORT).
-                setBackgroundTint(Color.parseColor("#24242b")).setTextColor(Color.parseColor("#ffffff")).show()
+                Snackbar.make(p0, "Скопировано", Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(Color.parseColor("#24242b"))
+                    .setTextColor(Color.parseColor("#ffffff")).show()
             }
             R.id.fab -> {
                 finish()
