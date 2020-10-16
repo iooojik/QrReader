@@ -100,7 +100,7 @@ class CreateQRActivity : AppCompatActivity(), View.OnClickListener {
 
             R.id.addURLtoQR -> {
                 PickerDialog.FilePicker(this).onFileSelect { clickedFile ->
-                    createQR(p0, clickedFile.toURI().toString()+ regex +
+                    createQR(p0, Uri.fromFile(clickedFile).toString() + regex +
                             MimeTypeMap.getSingleton().
                             getMimeTypeFromExtension(MimeTypeMap.
                             getFileExtensionFromUrl(clickedFile.toURI().toString()).toString()))

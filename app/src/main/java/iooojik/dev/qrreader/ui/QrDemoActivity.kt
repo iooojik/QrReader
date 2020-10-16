@@ -15,6 +15,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.zxing.BarcodeFormat
@@ -23,7 +24,9 @@ import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
 import com.google.zxing.common.BitMatrix
 import iooojik.dev.qrreader.AppСonstants.regex
+import iooojik.dev.qrreader.BuildConfig
 import iooojik.dev.qrreader.R
+import java.io.File
 import java.util.*
 
 
@@ -49,7 +52,6 @@ class QrDemoActivity : AppCompatActivity(), View.OnClickListener {
         img.setImageBitmap(encodeAsBitmap(text.toString(), BarcodeFormat.QR_CODE, 200, 200))
         //показываем текст
         val textView = findViewById<TextView>(R.id.decodedQR)
-        textView.text = text
         //если текст - это ссылка, то открываем её в браузере
         val openInBrowser = findViewById<Button>(R.id.openInBrowser)
         if (!text.startsWith("https://") && !text.startsWith("http://")){
@@ -65,17 +67,19 @@ class QrDemoActivity : AppCompatActivity(), View.OnClickListener {
             openFile.setOnClickListener {
                 openFileDir()
             }
-        }
+            buttonCopyText.visibility = View.GONE
+            textView.text = "Обнаружен файл. Вы можете открыть его по кнопке ниже."
+        } else textView.text = text
     }
 
     private fun openFileDir(){
         try {
-            var mType = ""
-            var fileURI = ""
-            fileURI = text.split(regex)[0]
-            mType = text.split(regex)[1]
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(fileURI))
-            intent.type = mType
+            val temp = text.split(regex)
+            //Log.e("праььа", temp[0] + " " + temp[1])
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.setDataAndType(Uri.parse(temp[0]), temp[1])
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
             startActivity(intent)
         } catch (e: Exception){
             Log.e("opening file error", e.toString())
