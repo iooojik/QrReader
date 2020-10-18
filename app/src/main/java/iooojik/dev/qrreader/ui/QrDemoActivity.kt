@@ -75,7 +75,7 @@ class QrDemoActivity : AppCompatActivity(), View.OnClickListener {
     private fun openFileDir(){
         try {
             val temp = text.split(regex)
-            //Log.e("праььа", temp[0] + " " + temp[1])
+            Log.e("праььа", temp[0] + " " + temp[1])
             val intent = Intent(Intent.ACTION_VIEW)
             intent.setDataAndType(Uri.parse(temp[0]), temp[1])
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

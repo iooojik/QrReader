@@ -29,6 +29,8 @@ import iooojik.dev.qrreader.AppСonstants
 import iooojik.dev.qrreader.AppСonstants.regex
 import iooojik.dev.qrreader.R
 import ir.esfandune.filepickerDialog.ui.PickerDialog
+import java.lang.StringBuilder
+import java.net.URLEncoder
 import java.util.*
 
 
@@ -100,10 +102,15 @@ class CreateQRActivity : AppCompatActivity(), View.OnClickListener {
 
             R.id.addURLtoQR -> {
                 PickerDialog.FilePicker(this).onFileSelect { clickedFile ->
-                    createQR(p0, Uri.fromFile(clickedFile).toString() + regex +
-                            MimeTypeMap.getSingleton().
-                            getMimeTypeFromExtension(MimeTypeMap.
-                            getFileExtensionFromUrl(clickedFile.toURI().toString()).toString()))
+                    //получаем расширение файла
+                    val fileName = clickedFile.name
+                    val extension = StringBuilder()
+                    for (i in (fileName.lastIndexOf('.')+1) until fileName.length){
+                        extension.append(fileName[i])
+                    }
+                    Log.e("tttt", extension.toString())
+                    createQR(p0,  Uri.fromFile(clickedFile).toString() + regex +
+                            MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.toString()).toString())
                 }
             }
         }
@@ -115,7 +122,7 @@ class CreateQRActivity : AppCompatActivity(), View.OnClickListener {
 
 
     private fun createQR(p0: View?, text: String){
-
+        Log.e("tttt", text)
         if (!text.isNullOrEmpty()) {
             val imgQR = findViewById<ImageView>(R.id.imageViewQR)
             imgQR.visibility = View.VISIBLE
